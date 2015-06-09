@@ -1,7 +1,7 @@
 package uk.co.interactive.sync;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,13 +20,14 @@ import uk.co.interactive.sync.Adapters.ImageAdapter;
 import uk.co.interactive.sync.Models.Feed;
 import uk.co.interactive.sync.Utils.Constants;
 import uk.co.interactive.sync.Utils.Utils;
+import uk.co.interactive.sync.views.NonScrollGridView;
 import uk.co.interactive.sync.webservice.Client;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     private List<String> mList;
-    private GridView mGridview;
+    private NonScrollGridView mGridview;
     private boolean mFinishScroll = false;
     private ImageAdapter mAdapter;
     private ProgressDialog mProgressDialog;
@@ -38,7 +39,8 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         mProgressDialog = new ProgressDialog(MainActivity.this);
         mList = new ArrayList<String>();
-        mGridview = (GridView) findViewById(R.id.activity_main_gridview);
+
+        mGridview = (NonScrollGridView) findViewById(R.id.activity_main_gridview);
         mGridview.setNumColumns(3);
         getInfo();
 

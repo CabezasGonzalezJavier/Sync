@@ -25,7 +25,6 @@ public class ImageAdapter extends ArrayAdapter<String> {
 
 
     static class ViewHolder {
-        public ImageView backgroundImageView;
         public ImageView imageView;
     }
 
@@ -45,7 +44,6 @@ public class ImageAdapter extends ArrayAdapter<String> {
             rowView = inflater.inflate(R.layout.rowlayout, parent, false);
 
             ViewHolder viewHolder = new ViewHolder();
-            viewHolder.backgroundImageView = (ImageView) rowView.findViewById(R.id.rowlayout_background_imageView);
             viewHolder.imageView = (ImageView) rowView.findViewById(R.id.rowlayout_imageView);
             rowView.setTag(viewHolder);
         }
@@ -56,7 +54,6 @@ public class ImageAdapter extends ArrayAdapter<String> {
         holder.imageView.setPadding(8, 8, 8, 8);
         Animation animation = AnimationUtils.loadAnimation(mActivity, R.anim.close);
 
-        holder.backgroundImageView.setAnimation(animation);
 
 
         Picasso.with(mActivity).load(mValues.get(position)).into(holder.imageView);
