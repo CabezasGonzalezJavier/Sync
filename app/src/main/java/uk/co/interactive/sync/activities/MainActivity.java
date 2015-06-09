@@ -1,12 +1,14 @@
-package uk.co.interactive.sync;
+package uk.co.interactive.sync.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.GridView;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -18,6 +20,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import uk.co.interactive.sync.Adapters.ImageAdapter;
 import uk.co.interactive.sync.Models.Feed;
+import uk.co.interactive.sync.R;
 import uk.co.interactive.sync.Utils.Constants;
 import uk.co.interactive.sync.Utils.Utils;
 import uk.co.interactive.sync.views.NonScrollGridView;
@@ -42,6 +45,17 @@ public class MainActivity extends Activity {
 
         mGridview = (NonScrollGridView) findViewById(R.id.activity_main_gridview);
         mGridview.setNumColumns(3);
+        mGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+
+                // Send intent to ZoomActivity
+                Intent i = new Intent(getApplicationContext(), ZoomActivity.class);
+                // Pass image index
+                i.putExtra(Constants.IMAGE_HTTP, mList.get(position));
+                startActivity(i);
+            }
+        });
         getInfo();
 
     }
