@@ -1,11 +1,13 @@
-package uk.co.interactive.sync.Models;
+package uk.co.interactive.sync.models;
 
 import com.google.gson.annotations.Expose;
+
+import java.io.Serializable;
 
 /**
  * Created by javiergonzalezcabezas on 9/6/15.
  */
-public class Media {
+public class Media implements Serializable {
     @Expose
     private String m;
 

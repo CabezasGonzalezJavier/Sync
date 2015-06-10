@@ -1,12 +1,17 @@
-package uk.co.interactive.sync.Models;
+package uk.co.interactive.sync.models;
+
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by javiergonzalezcabezas on 9/6/15.
  */
-public class Item {
+public class Item implements Serializable {
     @Expose
     private String title;
     @Expose
@@ -189,6 +194,5 @@ public class Item {
     public void setTags(String tags) {
         this.tags = tags;
     }
-
 
 }

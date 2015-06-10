@@ -7,4 +7,5 @@
     <string name="check_internet">Check your internet connection</string>
     <string name="data_failed">Data failed</string>
     <string name="title_activity_zoom">ZoomActivity</string>
+    <string name="activity_zoom_closebutton">X</string>
 </resources>

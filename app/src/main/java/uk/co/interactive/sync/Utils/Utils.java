@@ -1,4 +1,4 @@
-package uk.co.interactive.sync.Utils;
+package uk.co.interactive.sync.utils;
 
 import android.app.Activity;
 import android.content.Context;

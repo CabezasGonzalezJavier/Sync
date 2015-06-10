@@ -1,4 +1,4 @@
-package uk.co.interactive.sync.Models;
+package uk.co.interactive.sync.models;
 
 import com.google.gson.annotations.Expose;
 

@@ -7,8 +7,8 @@ import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.http.GET;
 import retrofit.http.Query;
-import uk.co.interactive.sync.Models.Feed;
-import uk.co.interactive.sync.Utils.Constants;
+import uk.co.interactive.sync.models.Feed;
+import uk.co.interactive.sync.utils.Constants;
 
 /**
  * Created by javiergonzalezcabezas on 9/6/15.

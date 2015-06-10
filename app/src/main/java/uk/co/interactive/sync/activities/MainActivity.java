@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,11 +19,13 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import uk.co.interactive.sync.Adapters.ImageAdapter;
-import uk.co.interactive.sync.Models.Feed;
+import uk.co.interactive.sync.adapters.ImageAdapter;
+import uk.co.interactive.sync.models.DataWrapper;
+import uk.co.interactive.sync.models.Feed;
 import uk.co.interactive.sync.R;
-import uk.co.interactive.sync.Utils.Constants;
-import uk.co.interactive.sync.Utils.Utils;
+import uk.co.interactive.sync.models.Item;
+import uk.co.interactive.sync.utils.Constants;
+import uk.co.interactive.sync.utils.Utils;
 import uk.co.interactive.sync.views.NonScrollGridView;
 import uk.co.interactive.sync.webservice.Client;
 
@@ -35,6 +38,7 @@ public class MainActivity extends Activity {
     private ImageAdapter mAdapter;
     private ProgressDialog mProgressDialog;
     private ListView mListView;
+    private Feed mFeed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +54,11 @@ public class MainActivity extends Activity {
                                     int position, long id) {
 
                 // Send intent to ZoomActivity
-                Intent i = new Intent(getApplicationContext(), ZoomActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ZoomActivity.class);
                 // Pass image index
-                i.putExtra(Constants.IMAGE_HTTP, mList.get(position));
-                startActivity(i);
+                intent.putExtra(Constants.IMAGE_HTTP, mList.get(position));
+                intent.putExtra(Constants.LIST, new DataWrapper((ArrayList<Item>) mFeed.getItems()));
+                startActivity(intent);
             }
         });
         getInfo();
@@ -68,10 +73,10 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void getList(Feed feed) {
+    public void getList() {
 
-        for (int i = 0; i < feed.getItems().size(); i++) {
-            mList.add(feed.getItems().get(i).getMedia().getM());
+        for (int i = 0; i < mFeed.getItems().size(); i++) {
+            mList.add(mFeed.getItems().get(i).getMedia().getM());
             Log.v("mlist", mList.size() + "__");
         }
         buildList();
@@ -95,7 +100,8 @@ public class MainActivity extends Activity {
         Callback<Feed> callback = new Callback<Feed>() {
             @Override
             public void success(Feed feed, Response response) {
-                getList(feed);
+                mFeed = feed;
+                getList();
 
             }
 

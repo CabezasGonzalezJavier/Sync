@@ -1,4 +1,4 @@
-package uk.co.interactive.sync.Adapters;
+package uk.co.interactive.sync.adapters;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
