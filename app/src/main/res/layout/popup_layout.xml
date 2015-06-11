@@ -24,19 +24,52 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/popup_layout_title_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Popup"
+            android:text="@string/popup_layout_title"
             android:textColor="@color/colorPopUpMarcoWindow" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/popup_layout_title_data_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="This is a simple popup"
+            android:textColor="@color/colorPopUpMarcoWindow" />
+
+        <TextView
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:id="@+id/poput_layout_description_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/popup_layout_description"
+            android:textColor="@color/colorPopUpMarcoWindow" />
+
+        <TextView
+            android:id="@+id/poput_layout_description_data_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="This is a simple popup"
+            android:lines="2"
+            android:textColor="@color/colorPopUpMarcoWindow" />
+
+        <TextView
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:id="@+id/popup_layout_take_by_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/popup_layout_taken_by"
+            android:textColor="@color/colorPopUpMarcoWindow" />
+
+        <TextView
+            android:id="@+id/popup_layout_take_by_data_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"

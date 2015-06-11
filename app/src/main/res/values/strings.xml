@@ -8,4 +8,9 @@
     <string name="data_failed">Data failed</string>
     <string name="title_activity_zoom">ZoomActivity</string>
     <string name="activity_zoom_closebutton">X</string>
+    <string name="activity_main_search_image">Search Images</string>
+    
+    <string name="popup_layout_title">TITLE:</string>
+    <string name="popup_layout_description">DESCRIPTION:</string>
+    <string name="popup_layout_taken_by">TAKEN BY:</string>
 </resources>

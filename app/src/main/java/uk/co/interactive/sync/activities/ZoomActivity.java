@@ -7,6 +7,8 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.text.Html;
+import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -20,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -30,10 +33,12 @@ import uk.co.interactive.sync.models.DataWrapper;
 import uk.co.interactive.sync.models.Item;
 import uk.co.interactive.sync.utils.Constants;
 
-public class ZoomActivity extends Activity implements GestureDetector.OnGestureListener {
+public class ZoomActivity extends Activity implements GestureDetector.OnGestureListener, View.OnClickListener {
     private GestureDetector mDetector;
     private Point mPoint;
     private boolean mShowWindow = false;
+    private int mPosition;
+    private ImageView mImageView;
     ArrayList<Item> mList;
 
     @Override
@@ -56,15 +61,19 @@ public class ZoomActivity extends Activity implements GestureDetector.OnGestureL
         if (extras == null) {
                 return;
         }
-        String image = extras.getString(Constants.IMAGE_HTTP);
+        mPosition = extras.getInt(Constants.IMAGE_HTTP);
 
         DataWrapper dw = (DataWrapper) getIntent().getSerializableExtra(Constants.LIST);
         mList = dw.getItems();
 
-        ImageView imageView = (ImageView) findViewById(R.id.activity_zoom_imageView);
+        mImageView = (ImageView) findViewById(R.id.activity_zoom_imageView);
+        Button rightButton = (Button) findViewById(R.id.activity_zoom_button_right);
+        Button leftButton = (Button) findViewById(R.id.activity_zoom_button_left);
+        rightButton.setOnClickListener(this);
+        leftButton.setOnClickListener(this);
 
 
-        Picasso.with(ZoomActivity.this).load(image).into(imageView);
+        Picasso.with(ZoomActivity.this).load(mList.get(mPosition).getMedia().getM()).into(mImageView);
 
     }
 
@@ -112,8 +121,8 @@ public class ZoomActivity extends Activity implements GestureDetector.OnGestureL
         int StatusBarHeight= rectgle.top;
 
         Display display = ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        int popupWidth = display.getWidth()- 170;
-        int popupHeight = 550;
+        int popupWidth = display.getWidth()- 220;
+        int popupHeight = 750;
 
         // Inflate the popup_layout.xml
         RelativeLayout viewGroup = (RelativeLayout) context
@@ -134,6 +143,15 @@ public class ZoomActivity extends Activity implements GestureDetector.OnGestureL
 
         // Getting a reference to Close button, and close the popup when
         // clicked.
+
+        TextView titleTextView = (TextView) layout.findViewById(R.id.popup_layout_title_data_textView);
+        TextView descriptionTextView = (TextView) layout.findViewById(R.id.poput_layout_description_data_textView);
+        TextView takeByTextView = (TextView) layout.findViewById(R.id.popup_layout_take_by_data_textView);
+
+        titleTextView.setText(mList.get(mPosition).getTitle());
+        descriptionTextView.setText(Html.fromHtml(mList.get(mPosition).getDescription().toString()));
+        takeByTextView.setText(mList.get(mPosition).getDateTaken());
+
         Button close = (Button) layout.findViewById(R.id.close);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,4 +168,27 @@ public class ZoomActivity extends Activity implements GestureDetector.OnGestureL
         return mDetector.onTouchEvent(me);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.activity_zoom_button_right:
+
+
+                if(mPosition!=mList.size()-1){
+                    mPosition++;
+                }else{
+                    mPosition=0;
+                }
+                Picasso.with(ZoomActivity.this).load(mList.get(mPosition).getMedia().getM()).into(mImageView);
+                break;
+            case R.id.activity_zoom_button_left:
+                if(mPosition!=0){
+                    mPosition--;
+                }else{
+                    mPosition = mList.size()-1;
+                }
+                Picasso.with(ZoomActivity.this).load(mList.get(mPosition).getMedia().getM()).into(mImageView);
+                break;
+        }
+    }
 }

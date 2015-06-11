@@ -3,14 +3,23 @@ package uk.co.interactive.sync.activities;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -30,7 +39,7 @@ import uk.co.interactive.sync.views.NonScrollGridView;
 import uk.co.interactive.sync.webservice.Client;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements TextView.OnEditorActionListener, TextWatcher {
 
     private List<String> mList;
     private NonScrollGridView mGridview;
@@ -39,6 +48,7 @@ public class MainActivity extends Activity {
     private ProgressDialog mProgressDialog;
     private ListView mListView;
     private Feed mFeed;
+    private EditText mEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,21 +57,40 @@ public class MainActivity extends Activity {
         mProgressDialog = new ProgressDialog(MainActivity.this);
         mList = new ArrayList<String>();
 
+        mEditText = (EditText) findViewById(R.id.activity_main_editText);
+        mEditText.setOnEditorActionListener(this);
+        mEditText.addTextChangedListener(this);
+
+
+
         mGridview = (NonScrollGridView) findViewById(R.id.activity_main_gridview);
         mGridview.setNumColumns(3);
+
         mGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
 
-                // Send intent to ZoomActivity
-                Intent intent = new Intent(getApplicationContext(), ZoomActivity.class);
-                // Pass image index
-                intent.putExtra(Constants.IMAGE_HTTP, mList.get(position));
-                intent.putExtra(Constants.LIST, new DataWrapper((ArrayList<Item>) mFeed.getItems()));
-                startActivity(intent);
+                if (!mList.get(position).toString().equals("s")) {
+                    // Send intent to ZoomActivity
+                    Intent intent = new Intent(getApplicationContext(), ZoomActivity.class);
+                    // Pass image index
+                    intent.putExtra(Constants.IMAGE_HTTP, position);
+                    intent.putExtra(Constants.LIST, new DataWrapper((ArrayList<Item>) mFeed.getItems()));
+                    startActivity(intent);
+                }
             }
         });
-        getInfo();
+
+        emptyGridView();
+    }
+
+    public void emptyGridView(){
+        mList = new ArrayList<String>();
+        for (int i = 0; i < 21; i++) {
+            mList.add("s");
+        }
+        mAdapter = new ImageAdapter(MainActivity.this, mList);
+        mGridview.setAdapter(mAdapter);
 
     }
 
@@ -74,26 +103,18 @@ public class MainActivity extends Activity {
     }
 
     public void getList() {
-
+        mList = new ArrayList<String>();
         for (int i = 0; i < mFeed.getItems().size(); i++) {
             mList.add(mFeed.getItems().get(i).getMedia().getM());
-            Log.v("mlist", mList.size() + "__");
         }
         buildList();
     }
 
     public void buildList() {
 
-
-        if (!mFinishScroll) {
             mAdapter = new ImageAdapter(MainActivity.this, mList);
             mGridview.setAdapter(mAdapter);
 
-        } else {
-            mAdapter.notifyDataSetChanged();
-            mFinishScroll = false;
-            mProgressDialog.dismiss();
-        }
     }
 
     public void getFeed() {
@@ -110,7 +131,7 @@ public class MainActivity extends Activity {
                 Toast.makeText(MainActivity.this,R.string.data_failed,Toast.LENGTH_LONG).show();
             }
         };
-        Client.initRestAdapter().getQuestions(Constants.NOJSONCALLBACK, Constants.FORMAT, callback);
+        Client.initRestAdapter().getQuestions(Constants.NOJSONCALLBACK, Constants.FORMAT, mEditText.getText().toString() , callback);
     }
 
     @Override
@@ -133,5 +154,40 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_SEARCH)) {
+            String string = mEditText.getText().toString();
+            Log.v("gg",string);
+            if(mEditText.getText().equals("")){
+                emptyGridView();
+            }else {
+            getInfo();
+                InputMethodManager imm = (InputMethodManager)getSystemService(
+                        MainActivity.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);}
+        }
+        return false;
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        String string = mEditText.getText().toString();
+        Log.v("gg",string);
+        if(mEditText.getText().toString().equals("")){
+            emptyGridView();
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
     }
 }

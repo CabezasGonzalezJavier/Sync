@@ -16,7 +16,7 @@ import uk.co.interactive.sync.utils.Constants;
 public class Client {
     public interface ClientInterface{
         @GET("/")
-        void getQuestions( @Query("nojsoncallback") String nojsoncallback, @Query("format") String format, Callback<Feed> callback);
+        void getQuestions( @Query("nojsoncallback") String nojsoncallback, @Query("format") String format, @Query("tags") String tag, Callback<Feed> callback);
     }
 
     public static ClientInterface initRestAdapter()
